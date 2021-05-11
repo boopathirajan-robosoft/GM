@@ -35,4 +35,5 @@ export async function fetchResponseFromAPI(
     console.log("Error while fetching API", endPointName, err);
   }
   return response.data;
+  
 }
