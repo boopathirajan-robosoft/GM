@@ -4,11 +4,11 @@
     "slug": "growMore",
     "version": "1.0.0",
     "orientation": "default",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/iconGrowMore.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splashGrowMore.png",
       "resizeMode": "contain",
-      "backgroundColor": "#000000"
+      "backgroundColor": "#80DDD9"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

@@ -5,14 +5,16 @@ import { HomeScreen, RegisterScreen, OTPScreen } from "../screens";
 const RootStack = createStackNavigator();
 const AuthStack = createStackNavigator();
 
+const screenOptions = { animationEnabled: false };
+
 function RootNavigations() {
   return (
     <RootStack.Navigator
       initialRouteName="Register"
       screenOptions={{ headerShown: false }}
     >
-      <RootStack.Screen name="Register" component={RegisterScreen} />
-      <RootStack.Screen name="OTPScreen" component={OTPScreen} />
+      <RootStack.Screen options={screenOptions} name="Register" component={RegisterScreen} />
+      <RootStack.Screen options={screenOptions} name="OTPScreen" component={OTPScreen} />
     </RootStack.Navigator>
   );
 }
@@ -23,7 +25,7 @@ function AuthNavigations() {
       initialRouteName="Home"
       screenOptions={{ headerShown: false }}
     >
-      <AuthStack.Screen name="Home" component={HomeScreen} />
+      <AuthStack.Screen options={screenOptions} name="Home" component={HomeScreen} />
     </AuthStack.Navigator>
   );
 }
