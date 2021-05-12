@@ -65,9 +65,9 @@ function RegisterForm() {
           attemptInvisibleVerification={true}
           // appVerificationDisabledForTesting={true}
         />
-        <Text style={styles.label}>Enter your phone number to proceed</Text>
+        <Text style={styles.label}>My number is</Text>
         <View style={styles.container}>
-          <Text style={styles.countryCode}>+91</Text>
+          <Text style={styles.countryCode}>IN +91 </Text>
           <TextInput
             keyboardType="numeric"
             returnKeyType="done"
@@ -96,23 +96,24 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   label: {
-    marginBottom: 8,
+    marginBottom: 35,
+    fontFamily: 'Montserrat_600SemiBold',
+    fontSize: 32,
+    color: "#232222", 
   },
   countryCode: {
-    fontSize: 24,
-    fontWeight: "bold",
-    transform: [
-      {
-        translateY: 42,
-      },
-    ],
+    fontSize: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#2b2b2b",
+    paddingBottom: 5,
+    paddingHorizontal: 5,
+    fontFamily: "Montserrat_400Regular"
   },
   input: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 16,
+    borderBottomColor: "red",
     borderBottomWidth: 1,
-    paddingVertical: 12,
-    paddingLeft: 40,
+    fontFamily: "Montserrat_400Regular"
   },
   errorContainer: {
     height: 32,

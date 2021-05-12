@@ -27,10 +27,13 @@ function RegisterScreen() {
 const styles = StyleSheet.create({
   safeAreaView: {
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    backgroundColor: "#efeeee",
+    height: "100%"
   },
   container: {
     width: "100%",
-    padding: 32,
+    paddingVertical: 50,
+    paddingHorizontal: 32
   },
 });
 

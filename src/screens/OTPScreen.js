@@ -22,10 +22,12 @@ function OTPScreen({ route }) {
 const styles = StyleSheet.create({
   safeAreaView: {
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    backgroundColor: "#efeeee"
   },
   container: {
     width: "100%",
-    padding: 32,
+    paddingVertical: 100,
+    paddingHorizontal: 32
   },
 });
 
