@@ -22,7 +22,8 @@ function OTPScreen({ route }) {
 const styles = StyleSheet.create({
   safeAreaView: {
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-    backgroundColor: "#efeeee"
+    backgroundColor: "#efeeee",
+    height: "100%"
   },
   container: {
     width: "100%",
