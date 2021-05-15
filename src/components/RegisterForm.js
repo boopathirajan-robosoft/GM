@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import {
-  ActivityIndicator,
   View,
   KeyboardAvoidingView,
   Platform,
@@ -14,6 +13,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import firebase, { loginWithPhoneNumber } from "../firebase";
+import { ActivitySpinner } from './commons'
 import downArrow from "../../assets/caret-down.png";
 
 function RegisterButton({ enabled, onPress }) {
@@ -68,21 +68,13 @@ function RegisterForm() {
       );
       setLoadingScreen(false);
       navigation.navigate("OTPScreen", {
-        verificationId,
+        verificationId, phoneNumber
       });
     } catch (err) {
       setError(true);
       setLoadingScreen(false);
       console.log("Error on phone number verification", err);
     }
-  };
-
-  const activityIndicator = () => {
-    return (
-      <View style={[styles.spinnerContainer]}>
-        <ActivityIndicator size="large" color="#80DDD9" />
-      </View>
-    );
   };
 
   return (
@@ -92,7 +84,7 @@ function RegisterForm() {
           ref={recaptchaVerifier}
           firebaseConfig={firebaseConfig}
           attemptInvisibleVerification={true}
-          // appVerificationDisabledForTesting={true}
+          appVerificationDisabledForTesting={true}
         />
         <Text style={styles.label}>My number is</Text>
         <View style={styles.container}>
@@ -115,7 +107,7 @@ function RegisterForm() {
                 placeholder={"Phone Number"}
                 placeholderTextColor={"#969595"}
                 style={styles.input}
-                selectionColor={"#00d8cf"}
+                selectionColor={"#80DDD9"}
               />
             </View>
           </View>
@@ -134,7 +126,7 @@ function RegisterForm() {
           </Text>
         </View>
         {loadingScreen ? (
-          activityIndicator()
+          <ActivitySpinner />
         ) : (
           <RegisterButton
             enabled={phoneNumber.length > 0 ? true : false}
@@ -147,14 +139,6 @@ function RegisterForm() {
 }
 
 const styles = StyleSheet.create({
-  spinnerContainer: {
-    flex: 1,
-    justifyContent: "center",
-    textAlign: "center",
-    paddingTop: 30,
-    backgroundColor: "#efeeee",
-    padding: 8,
-  },
   container: {
     paddingBottom: 16,
   },
@@ -184,7 +168,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 18,
-    borderBottomColor: "#00d8cf",
+    borderBottomColor: "#80DDD9",
     borderBottomWidth: 2,
     paddingBottom: 8,
     fontFamily: "Montserrat_500Medium",
@@ -193,10 +177,6 @@ const styles = StyleSheet.create({
   errorContainer: {
     height: 32,
     marginTop: 20,
-    fontWeight: "bold",
-    fontFamily: "Montserrat_500Medium",
-    fontSize: 12,
-    borderBottomColor: "red",
   },
   description: {
     fontFamily: "Montserrat_500Medium",
@@ -206,6 +186,9 @@ const styles = StyleSheet.create({
   },
   errorMessage: {
     color: "#ff0033",
+    fontFamily: "Montserrat_500Medium",
+    fontSize: 14,
+    marginBottom: 40,
   },
   button: {
     paddingHorizontal: 24,

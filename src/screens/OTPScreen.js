@@ -9,11 +9,11 @@ import {
 import { OTPForm } from "../components/OTPForm";
 
 function OTPScreen({ route }) {
-  const { verificationId } = route.params;
+  const { verificationId = "", phoneNumber = "" } = route.params;
   return (
     <SafeAreaView style={styles.safeAreaView}>
       <View style={styles.container}>
-        <OTPForm verificationId={verificationId} />
+        <OTPForm verificationId={verificationId} phoneNumber={phoneNumber} />
       </View>
     </SafeAreaView>
   );
@@ -26,8 +26,7 @@ const styles = StyleSheet.create({
     height: "100%"
   },
   container: {
-    width: "100%",
-    paddingVertical: 100,
+    paddingVertical: 50,
     paddingHorizontal: 32
   },
 });
