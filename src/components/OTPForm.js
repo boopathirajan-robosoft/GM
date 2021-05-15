@@ -15,7 +15,7 @@ import { verifyOTP, createUser, getUserDetails } from "../firebase";
 
 const INVALID_OTP =
   "Please enter the correct six digit code that we sent you just before.";
-const INCORRECT_OTP = "The cdoe you entered is invalid - please try again.";
+const INCORRECT_OTP = "The code you just entered is invalid - please try again.";
 
 function VerifyButton({ enabled, onPress }) {
   return (
@@ -100,7 +100,7 @@ function OTPForm({ verificationId, phoneNumber }) {
           onChangeText={setVerificationCode}
           style={styles.input}
           selectionColor={"#a5a2a2"}
-          placeholder={" code "}
+          autoFocus={true}
           placeholderTextColor={"#969595"}
         />
       </View>
