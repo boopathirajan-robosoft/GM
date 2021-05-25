@@ -1,6 +1,6 @@
 import * as React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { HomeScreen, RegisterScreen, OTPScreen } from "../screens";
+import { HomeScreen, RegisterScreen, OTPScreen, PaymentScreen, ProfileScreen, PremiumScreen } from "../screens";
 
 const RootStack = createStackNavigator();
 const AuthStack = createStackNavigator();
@@ -26,6 +26,9 @@ function AuthNavigations() {
       screenOptions={{ headerShown: false }}
     >
       <AuthStack.Screen options={screenOptions} name="Home" component={HomeScreen} />
+      <AuthStack.Screen options={screenOptions} name="Payment" component={PaymentScreen} />
+      <AuthStack.Screen options={screenOptions} name="Profile" component={ProfileScreen} />
+      <AuthStack.Screen options={screenOptions} name="Premium" component={PremiumScreen} />
     </AuthStack.Navigator>
   );
 }

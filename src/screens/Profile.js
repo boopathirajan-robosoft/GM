@@ -3,20 +3,20 @@ import {
   SafeAreaView,
   StyleSheet,
   StatusBar,
-  LogBox,
+//   LogBox,
   Text,
 } from "react-native";
 import { Layout } from "../components/commons";
 
 // hide warning "Setting a timer for a long period of time, i.e. multiple minutes"
 // https://stackoverflow.com/a/64832663
-LogBox.ignoreLogs(["Setting a timer"]);
+// LogBox.ignoreLogs(["Setting a timer"]);
 
-function HomeScreen() {
+function ProfileScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <Layout>
-        <Text>Hello Home</Text>
+        <Text>Profile Screen</Text>
       </Layout>
     </SafeAreaView>
   );
@@ -30,5 +30,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
-export { HomeScreen };
+export default ProfileScreen;
+export { ProfileScreen };
