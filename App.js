@@ -14,7 +14,7 @@ import { RootNavigations, AuthNavigations } from "./src/navigations";
 
 Sentry.init({
   dsn: "https://19e69cd786d94226a94734996dda6067@o755507.ingest.sentry.io/5791960",
-  enableInExpoDevelopment: true,
+  // enableInExpoDevelopment: true,
   debug: true, // Set this to `false` in production.
 });
 
