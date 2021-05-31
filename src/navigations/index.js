@@ -1,1 +1,2 @@
-export * from "./Navigator";
+export * from "./RootNavigations";
+export * from "./AuthNavigations";

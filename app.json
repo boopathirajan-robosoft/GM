@@ -10,6 +10,28 @@
       "resizeMode": "contain",
       "backgroundColor": "#80DDD9"
     },
+    "plugins": [
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "",
+          "enableGooglePay": false
+        }
+      ],
+      "sentry-expo"
+    ],
+    "hooks": {
+      "postPublish":[
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "grow-more",
+            "project": "grow-more-expo",
+            "authToken": "73de1adf8be342878675cbfef5e4fcff5aa49e8aff5a4241a4c0660dca29cf55"
+          }
+        }
+      ]
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -23,7 +45,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.app.growmore"
     },
     "web": {
       "favicon": "./assets/favicon.png"

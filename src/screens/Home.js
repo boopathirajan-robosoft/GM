@@ -5,17 +5,18 @@ import {
   View,
   Platform,
   StatusBar,
-  Pressable,
   Text,
   TextInput,
   StyleSheet,
   LogBox,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import * as Notifications from "expo-notifications";
+import { Button } from "../components/commons";
 import { signOut } from "../firebase";
 import {
-  createUser,
-  getUserDetails,
+  checkAndCreateUser,
+  getSavedCards,
   updateUserName,
   updateNotificationToken,
 } from "../models";
@@ -24,30 +25,6 @@ import { registerForPushNotificationsAsync } from "../utils";
 // hide warning "Setting a timer for a long period of time, i.e. multiple minutes"
 // https://stackoverflow.com/a/64832663
 LogBox.ignoreLogs(["Setting a timer"]);
-
-function SignOutButton({ onPress }) {
-  return (
-    <Pressable onPress={onPress}>
-      {({ pressed }) => (
-        <View style={[styles.button, pressed && { opacity: 0.65 }]}>
-          <Text style={styles.btnText}>SIGN OUT</Text>
-        </View>
-      )}
-    </Pressable>
-  );
-}
-
-function UpdateButton({ onPress }) {
-  return (
-    <Pressable onPress={onPress}>
-      {({ pressed }) => (
-        <View style={[styles.button, pressed && { opacity: 0.65 }]}>
-          <Text style={styles.btnText}>UPDATE</Text>
-        </View>
-      )}
-    </Pressable>
-  );
-}
 
 // to handle notifications when is open(foreground)
 Notifications.setNotificationHandler({
@@ -61,7 +38,10 @@ Notifications.setNotificationHandler({
 function HomeScreen() {
   const [displayName, setDisplayName] = useState("");
   const [userInfo, setUserInfo] = useState({});
+  const [savedCards, setSavedCards] = useState({});
   const { landscape = false } = useDeviceOrientation();
+  const navigation = useNavigation();
+  const hasSavedCards = savedCards.cards && savedCards.cards.length;
 
   useEffect(() => {
     fetchUserDetails();
@@ -69,15 +49,12 @@ function HomeScreen() {
   }, []);
 
   const fetchUserDetails = async () => {
-    const profileResponse = await getUserDetails();
-    // if user is not created in the backend
-    if (
-      profileResponse.status === 404 ||
-      profileResponse.errorCode === "not-found"
-    ) {
-      await createUser();
+    const profileResponse = await checkAndCreateUser();
+    const customerCards = await getSavedCards();
+    if (profileResponse.data) {
+      setUserInfo(profileResponse.data);
     }
-    setUserInfo(profileResponse.data);
+    setSavedCards(customerCards);
   };
 
   const submitPushNotificationToken = async () => {
@@ -95,16 +72,16 @@ function HomeScreen() {
       await updateUserName(displayName);
       await fetchUserDetails();
     } else {
-      console.log("Please enter a valid display name");
+      // TODO: Handle Validation
     }
   };
 
   const handleSignOut = async () => {
-    try {
-      await signOut();
-    } catch (err) {
-      console.log("Error while signing out", err);
-    }
+    await signOut();
+  };
+
+  const handlePayment = async () => {
+    navigation.navigate("Payment");
   };
 
   return (
@@ -119,10 +96,21 @@ function HomeScreen() {
             onChangeText={setDisplayName}
             style={styles.input}
           />
-          <UpdateButton onPress={updateProfile} />
+          <Button title="UPDATE" onPress={updateProfile} />
         </View>
       )}
-      <SignOutButton onPress={handleSignOut} />
+      <Button title="SIGN OUT" onPress={handleSignOut} />
+      <Button
+        title="Payment"
+        onPress={handlePayment}
+        style={{ marginTop: 10 }}
+      />
+      <Text>Saved Cards</Text>
+      {hasSavedCards ? (
+        <Text>{JSON.stringify(savedCards)}</Text>
+      ) : (
+        <Text>No saved cards</Text>
+      )}
     </SafeAreaView>
   );
 }

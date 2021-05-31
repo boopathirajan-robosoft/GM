@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Native } from "sentry-expo";
 import { auth } from "../firebase";
 import { API_CONFIG } from "./apiConfig";
 
@@ -19,9 +20,7 @@ export async function fetchResponseFromAPI(
     ...headers,
   };
   const { url, method } = API_CONFIG[endPointName];
-  console.log("url", url);
   let response = {};
-
   try {
     response = await axios({
       method,
@@ -32,8 +31,11 @@ export async function fetchResponseFromAPI(
     });
   } catch (err) {
     response = err.response;
-    console.log("Error while fetching API", endPointName, err);
+    Native.captureException(
+      `FETCH API ERROR: url: ${url} - endPointName: ${endPointName} ${JSON.stringify(
+        err
+      )}`
+    );
   }
   return response.data;
-  
 }
