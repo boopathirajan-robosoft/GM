@@ -1,31 +1,33 @@
-import React from "react";
-import {
-  SafeAreaView,
-  StyleSheet,
-  StatusBar,
-//   LogBox,
-  Text,
-} from "react-native";
-import { Layout } from "../components/commons";
-
-// hide warning "Setting a timer for a long period of time, i.e. multiple minutes"
-// https://stackoverflow.com/a/64832663
-// LogBox.ignoreLogs(["Setting a timer"]);
+import React, { useState, useEffect } from "react";
+import { SafeAreaView, Platform, StatusBar, StyleSheet } from "react-native";
+import { StripeProvider } from "@stripe/stripe-react-native";
+import { StripePayment } from "../components";
+import { getStripeConfig } from "../models";
 
 function PaymentScreen() {
+  const [publishableKey, setPublishableKey] = useState("");
+
+  useEffect(() => {
+    fetchPublishableKey();
+  }, []);
+
+  const fetchPublishableKey = async () => {
+    const { publishableKey: key = "" } = await getStripeConfig();
+    setPublishableKey(key);
+  };
   return (
-    <SafeAreaView style={styles.container}>
-      <Layout>
-        <Text>Payment Screen</Text>
-      </Layout>
-    </SafeAreaView>
+    <StripeProvider publishableKey={publishableKey}>
+      <SafeAreaView style={styles.container}>
+        <StripePayment />
+      </SafeAreaView>
+    </StripeProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#efeeee",
+    backgroundColor: "#fff",
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
 });

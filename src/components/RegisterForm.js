@@ -4,7 +4,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   Text,
-  Pressable,
   TextInput,
   StyleSheet,
   Image,
@@ -13,28 +12,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import firebase, { loginWithPhoneNumber } from "../firebase";
-import { ActivitySpinner } from './commons'
+import { ActivitySpinner, Button } from "./commons";
 import downArrow from "../../assets/caret-down.png";
-
-function RegisterButton({ enabled, onPress }) {
-  return (
-    <Pressable onPress={onPress}>
-      {({ pressed }) => (
-        <View
-          style={[
-            styles.button,
-            pressed && { opacity: 0.5 },
-            enabled && styles.buttonEnabled,
-          ]}
-        >
-          <Text style={[styles.btnText, enabled && styles.textenabled]}>
-            CONTINUE
-          </Text>
-        </View>
-      )}
-    </Pressable>
-  );
-}
 
 function RegisterForm() {
   const recaptchaVerifier = useRef(null);
@@ -46,10 +25,10 @@ function RegisterForm() {
     : undefined;
   const navigation = useNavigation();
 
-  const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const validatePhoneNumber = async () => {
-      await wait(800)
-      return phoneNumber.length == 10;
+    await wait(800);
+    return phoneNumber.length == 10;
   };
   const handleSignIn = async () => {
     setError(false);
@@ -61,19 +40,19 @@ function RegisterForm() {
       setError(true);
       return;
     }
-    try {
-      const verificationId = await loginWithPhoneNumber(
-        `+91${phoneNumber}`,
-        recaptchaVerifier.current
-      );
+    const verificationId = await loginWithPhoneNumber(
+      `+91${phoneNumber}`,
+      recaptchaVerifier.current
+    );
+    if (verificationId) {
       setLoadingScreen(false);
       navigation.navigate("OTPScreen", {
-        verificationId, phoneNumber
+        verificationId,
+        phoneNumber,
       });
-    } catch (err) {
+    } else {
       setError(true);
       setLoadingScreen(false);
-      console.log("Error on phone number verification", err);
     }
   };
 
@@ -84,7 +63,7 @@ function RegisterForm() {
           ref={recaptchaVerifier}
           firebaseConfig={firebaseConfig}
           attemptInvisibleVerification={true}
-          appVerificationDisabledForTesting={true}
+          // appVerificationDisabledForTesting={true}
         />
         <Text style={styles.label}>My number is</Text>
         <View style={styles.container}>
@@ -122,13 +101,14 @@ function RegisterForm() {
         <View style={styles.descContainer}>
           <Text style={styles.description}>
             When you tap Continue. We will send a text with verification code.
-            Message and data rates may apply. The verfied can be used to login.
+            Message and data rates may apply. The verified can be used to login.
           </Text>
         </View>
         {loadingScreen ? (
           <ActivitySpinner />
         ) : (
-          <RegisterButton
+          <Button
+            title="CONTINUE"
             enabled={phoneNumber.length > 0 ? true : false}
             onPress={handleSignIn}
           />
@@ -189,27 +169,6 @@ const styles = StyleSheet.create({
     fontFamily: "Montserrat_500Medium",
     fontSize: 14,
     marginBottom: 40,
-  },
-  button: {
-    paddingHorizontal: 24,
-    paddingVertical: 10,
-    textTransform: "uppercase",
-    backgroundColor: "lightgray",
-    opacity: 0.4,
-    borderRadius: 20,
-  },
-  buttonEnabled: {
-    opacity: 1,
-    backgroundColor: "#80DDD9",
-  },
-  btnText: {
-    textAlign: "center",
-    color: "#ffffff",
-    fontFamily: "Montserrat_500Medium",
-    fontSize: 20,
-  },
-  textenabled: {
-    color: "#efeeee",
   },
 });
 

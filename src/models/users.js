@@ -1,36 +1,38 @@
 import { fetchResponseFromAPI } from "../utils";
 
 export const createUser = async () => {
-  try {
-    await fetchResponseFromAPI("createUser");
-  } catch (err) {
-    console.log("Error creating user", err);
-  }
+  await fetchResponseFromAPI("createUser");
 };
 
 export const getUserDetails = async () => {
-  try {
-    const response = await fetchResponseFromAPI("getProfile");
-    return response;
-  } catch (err) {
-    console.log("Error on fetching user details");
+  const profileResponse = await fetchResponseFromAPI("getProfile");
+  return profileResponse || {};
+};
+
+export const checkAndCreateUser = async () => {
+  const profileResponse = await getUserDetails();
+  // if user is not created in the backend
+  if (
+    profileResponse.name === "NotFoundError" ||
+    profileResponse.status === 404
+  ) {
+    await createUser();
   }
+
+  return profileResponse;
 };
 
 export const updateUserName = async (userName) => {
-  try {
-    const postData = { userName };
-    await fetchResponseFromAPI("updateProfile", null, postData);
-  } catch (err) {
-    console.log("Error on updating user profile", err);
-  }
+  const postData = { userName };
+  await fetchResponseFromAPI("updateProfile", null, postData);
 };
 
 export const updateNotificationToken = async (deviceToken) => {
-  try {
-    const postData = { deviceToken };
-    await fetchResponseFromAPI("updateProfile", null, postData);
-  } catch (err) {
-    console.log("Error on updating notification token", err);
-  }
+  const postData = { deviceToken };
+  await fetchResponseFromAPI("updateProfile", null, postData);
+};
+
+export const getSavedCards = async () => {
+  const savedCardsResponse = await fetchResponseFromAPI("getSavedCards");
+  return savedCardsResponse;
 };

@@ -4,38 +4,19 @@ import {
   KeyboardAvoidingView,
   Platform,
   Text,
-  Pressable,
   TextInput,
   StyleSheet,
   Keyboard,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { ActivitySpinner } from "./commons";
-import { verifyOTP, createUser, getUserDetails } from "../firebase";
+import { ActivitySpinner, Button } from "./commons";
+import { verifyOTP } from "../firebase";
+import { checkAndCreateUser } from "../models";
 
 const INVALID_OTP =
   "Please enter the correct six digit code that we sent you just before.";
-const INCORRECT_OTP = "The code you just entered is invalid - please try again.";
-
-function VerifyButton({ enabled, onPress }) {
-  return (
-    <Pressable onPress={onPress}>
-      {({ pressed }) => (
-        <View
-          style={[
-            styles.button,
-            pressed && { opacity: 0.5 },
-            enabled && styles.buttonEnabled,
-          ]}
-        >
-          <Text style={[styles.btnText, enabled && styles.textenabled]}>
-            CONTINUE
-          </Text>
-        </View>
-      )}
-    </Pressable>
-  );
-}
+const INCORRECT_OTP =
+  "The code you just entered is invalid - please try again.";
 
 function OTPForm({ verificationId, phoneNumber }) {
   const [verificationCode, setVerificationCode] = useState("");
@@ -43,9 +24,9 @@ function OTPForm({ verificationId, phoneNumber }) {
   const [errorMessage, setErrorMessage] = useState("");
   const navigation = useNavigation();
 
-  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  // const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const validateOTP = async () => {
-    await wait(800);
+    // await wait(800);
     return verificationCode.length == 6;
   };
   const handleOTPVerification = async () => {
@@ -58,25 +39,15 @@ function OTPForm({ verificationId, phoneNumber }) {
       setErrorMessage(INVALID_OTP);
       return;
     }
-    try {
-      await verifyOTP(verificationId, verificationCode);
-      const profileResponse = await getUserDetails();
-      // create entry in backend if the user doesn't exists.
-      if (
-        profileResponse.status === 404 ||
-        profileResponse.errorCode === "not-found"
-      ) {
-        await createUser();
-      }
+    const verifyOTPResponse = await verifyOTP(verificationId, verificationCode);
+    if (verifyOTPResponse.code === "auth/invalid-verification-code") {
       setLoadingScreen(false);
-      navigation.navigate("Home");
-    } catch (err) {
-      if (err.code === "auth/invalid-verification-code") {
-        setLoadingScreen(false);
-        setErrorMessage(INCORRECT_OTP);
-      }
-      console.log("Error on OTP verification", JSON.stringify(err));
+      setErrorMessage(INCORRECT_OTP);
+      return;
     }
+    await checkAndCreateUser();
+    setLoadingScreen(false);
+    navigation.navigate("Home");
   };
 
   return (
@@ -112,7 +83,8 @@ function OTPForm({ verificationId, phoneNumber }) {
       {loadingScreen ? (
         <ActivitySpinner />
       ) : (
-        <VerifyButton
+        <Button
+          title="CONTINUE"
           enabled={verificationCode.length > 0 ? true : false}
           onPress={handleOTPVerification}
         />
@@ -158,32 +130,12 @@ const styles = StyleSheet.create({
   },
   errorContainer: {
     height: 32,
-    marginBottom: 40
+    marginBottom: 40,
   },
   errorMessage: {
     color: "#ff0033",
     fontFamily: "Montserrat_500Medium",
     fontSize: 14,
-  },
-  button: {
-    paddingHorizontal: 24,
-    paddingVertical: 10,
-    backgroundColor: "lightgray",
-    opacity: 0.4,
-    borderRadius: 20,
-  },
-  buttonEnabled: {
-    opacity: 1,
-    backgroundColor: "#80DDD9",
-  },
-  btnText: {
-    textAlign: "center",
-    color: "#ffffff",
-    fontFamily: "Montserrat_500Medium",
-    fontSize: 20,
-  },
-  textenabled: {
-    color: "#efeeee",
   },
 });
 

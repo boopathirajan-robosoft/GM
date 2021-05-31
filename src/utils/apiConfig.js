@@ -4,6 +4,7 @@ const BASE_PATH = "/.netlify/functions/api";
 
 const userBasePath = `${API_DOMAIN}${BASE_PATH}/user`;
 const productBasePath = `${API_DOMAIN}${BASE_PATH}/products`;
+const paymentBasePath = `${API_DOMAIN}${BASE_PATH}/payment`;
 
 export const API_CONFIG = {
   createUser: {
@@ -18,8 +19,20 @@ export const API_CONFIG = {
     method: "GET",
     url: `${userBasePath}/profile`,
   },
+  getSavedCards: {
+    method: "GET",
+    url: `${userBasePath}/savedcards`,
+  },
   getProducts: {
     method: "GET",
     url: `${productBasePath}`,
+  },
+  getStripePublishableKey: {
+    method: "GET",
+    url: `${paymentBasePath}/config`,
+  },
+  createPaymentIntent: {
+    method: "GET",
+    url: `${paymentBasePath}/create`,
   },
 };
