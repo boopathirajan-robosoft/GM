@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { HomeScreen, PaymentScreen } from "../screens";
+import { HomeScreen, PaymentScreen, ProfileScreen, PremiumScreen } from "../screens";
 
 const AuthStack = createStackNavigator();
 
@@ -12,6 +12,8 @@ function AuthNavigations() {
     >
       <AuthStack.Screen name="Home" component={HomeScreen} />
       <AuthStack.Screen name="Payment" component={PaymentScreen} />
+      <AuthStack.Screen name="Profile" component={ProfileScreen} />
+      <AuthStack.Screen name="Premium" component={PremiumScreen} />
     </AuthStack.Navigator>
   );
 }
