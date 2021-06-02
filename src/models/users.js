@@ -34,5 +34,5 @@ export const updateNotificationToken = async (deviceToken) => {
 
 export const getSavedCards = async () => {
   const savedCardsResponse = await fetchResponseFromAPI("getSavedCards");
-  return savedCardsResponse;
+  return savedCardsResponse || {};
 };

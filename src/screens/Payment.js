@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { SafeAreaView, Platform, StatusBar, StyleSheet } from "react-native";
 import { StripeProvider } from "@stripe/stripe-react-native";
-import { StripePayment } from "../components";
+import { PaymentForm, SavedPayments } from "../components";
 import { getStripeConfig } from "../models";
 
 function PaymentScreen() {
@@ -18,7 +18,8 @@ function PaymentScreen() {
   return (
     <StripeProvider publishableKey={publishableKey}>
       <SafeAreaView style={styles.container}>
-        <StripePayment />
+        <SavedPayments />
+        <PaymentForm />
       </SafeAreaView>
     </StripeProvider>
   );
