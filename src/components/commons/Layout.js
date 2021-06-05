@@ -4,10 +4,10 @@ import { Header } from "./Header";
 
 const Layout = (props) => {
   return (
-    <>
+    <View>
       <Header />
       {props.children}
-    </>
+    </View>
   );
 };
 

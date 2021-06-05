@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, Text, Alert, StyleSheet } from "react-native";
 import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
 import { Native } from "sentry-expo";
-import { Button } from "./commons";
-import { createPaymentIntent } from "../models";
+import { Button } from "../commons";
+import { createPaymentIntent } from "../../models";
 
-function StripePayment() {
+function PaymentForm() {
   const [card, setCard] = useState(null);
   const { confirmPayment, loading } = useConfirmPayment();
 
-  const handlePayPress = async () => {
+  const handlePayment = async () => {
     // TODO: handle input validation
     if (!card) {
       return;
@@ -18,7 +18,7 @@ function StripePayment() {
     if (clientSecret) {
       // Submit the payment
       try {
-        const { error } = await confirmPayment(clientSecret, {
+        const { paymentIntent, error } = await confirmPayment(clientSecret, {
           type: "Card",
           setupFutureUsage: "OffSession",
         });
@@ -27,6 +27,9 @@ function StripePayment() {
           Native.captureException(
             `STRIPE: payment confirmation error ${JSON.stringify(error)}`
           );
+        } else if (paymentIntent) {
+          // TODO: Handle payment success
+          Alert.alert("Payment Success. Please click back.");
         }
       } catch (err) {
         Native.captureException(
@@ -38,6 +41,7 @@ function StripePayment() {
 
   return (
     <View>
+      <Text>Add a new card</Text>
       <CardField
         postalCodeEnabled={false}
         style={{
@@ -47,12 +51,12 @@ function StripePayment() {
         }}
         onCardChange={(cardDetails) => setCard(cardDetails)}
       />
-      <Button title="Pay" onPress={handlePayPress} enabled={!loading} />
+      <Button title="Pay 100" onPress={handlePayment} enabled={!loading} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({});
 
-export default StripePayment;
-export { StripePayment };
+export default PaymentForm;
+export { PaymentForm };

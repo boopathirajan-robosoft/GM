@@ -3,10 +3,11 @@ import {
   SafeAreaView,
   StyleSheet,
   StatusBar,
-//   LogBox,
+  //   LogBox,
   Text,
 } from "react-native";
-import { Layout } from "../components/commons";
+import { Layout, Button } from "../components";
+import { signOut } from "../firebase";
 
 // hide warning "Setting a timer for a long period of time, i.e. multiple minutes"
 // https://stackoverflow.com/a/64832663
@@ -17,6 +18,7 @@ function ProfileScreen() {
     <SafeAreaView style={styles.container}>
       <Layout>
         <Text>Profile Screen</Text>
+        <Button title="Sign out" onPress={signOut} />
       </Layout>
     </SafeAreaView>
   );

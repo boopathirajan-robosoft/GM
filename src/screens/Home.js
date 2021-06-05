@@ -6,7 +6,7 @@ import {
   LogBox,
   Text,
 } from "react-native";
-import { Layout } from "../components/commons";
+import { Layout } from "../components";
 
 // hide warning "Setting a timer for a long period of time, i.e. multiple minutes"
 // https://stackoverflow.com/a/64832663
